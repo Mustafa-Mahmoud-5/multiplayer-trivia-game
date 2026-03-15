@@ -46,9 +46,9 @@ public class ClientHandler implements Runnable {
             }
 
         } catch (Exception e) {
-            // disconnect
             e.printStackTrace();
         } finally {
+            // disconnect
             closeConnection();
         }
     }

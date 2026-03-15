@@ -29,7 +29,7 @@ public class GameServer {
 
         } catch (Exception e) {
             System.out.println("Error starting server");
-            System.out.println(e.printStackTrace(););
+            e.printStackTrace();
         }
     }
 }
