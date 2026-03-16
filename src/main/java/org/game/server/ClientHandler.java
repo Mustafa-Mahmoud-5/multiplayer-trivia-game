@@ -1,21 +1,56 @@
 package org.game.server;
 
 import org.game.common.models.User;
+import org.game.common.protocol.Message;
+import org.game.common.protocol.MessageParser;
+import org.game.common.protocol.enums.MessageType;
+import org.game.server.repositories.QuestionRepo;
+import org.game.server.repositories.TeamRepo;
+import org.game.server.repositories.UserRepo;
 
 import java.io.*;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable {
 
+    UserRepo userRepo;
+    QuestionRepo questionRepo;
+    TeamRepo teamRepo;
+
+
+
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
-    private User user;
+    private User user; // user attributed with current connection/thread
 
-    public ClientHandler(Socket socket) throws IOException {
+
+
+
+
+    public ClientHandler(Socket socket, UserRepo userRepo, QuestionRepo questionRepo, TeamRepo teamRepo) throws IOException {
         this.socket = socket;
         this.in  = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out  = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+
+        this.userRepo = userRepo;
+        this.questionRepo = questionRepo;
+        this.teamRepo = teamRepo;
+
+    }
+
+
+    public User getUser() {
+        return user;
+    }
+
+    public void emitMsg(String message) {
+        out.println(message);
+    }
+
+    public String receiveMsg() throws IOException {
+        String msg = in.readLine();
+        return msg;
     }
 
     private void closeConnection() {
@@ -23,32 +58,19 @@ public class ClientHandler implements Runnable {
             if (in != null) in.close();
             if (out != null) out.close();
             if (socket != null) socket.close();
-            System.out.println("Client handler closed.");
+            System.out.println("Socket closed.");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 
-    private void handleMessage(String msg) {
-        System.out.println("Handled msg " + msg);
-    }
 
     // TODO: Handle Game Control FLow
     @Override
     public void run() {
         try {
-            String msg;
-            while((msg = in.readLine()) != null) {
-                if(msg.trim().equals("-")) {
-                   out.println("Bye");
-                    break;
-                }
-
-                System.out.println("Received from client: " + msg);
-                handleMessage(msg);
-            }
-
+            handleAuthenticationState();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -57,4 +79,79 @@ public class ClientHandler implements Runnable {
             closeConnection();
         }
     }
+
+
+
+
+//    Client Finite State Machine
+
+    public void handleAuthenticationState() throws IOException {
+
+        emitMsg("Authenticate. Enter "+ MessageType.REGISTER + " or " + MessageType.LOGIN);
+
+        while(true) {
+            try {
+                String input = receiveMsg();
+                Message msg = MessageParser.parse(input);
+                MessageType messageType = msg.getMessageType();
+
+                switch (messageType) {
+                    case REGISTER -> {
+
+
+                        return;
+                    }
+                    case LOGIN ->  {
+
+
+                        return;
+                    }
+
+                    default -> {
+                        emitMsg(MessageType.ERROR + "|" + "Invalid messageType. Try Again");
+                    }
+                }
+            } catch (Exception e) {
+                emitMsg(MessageType.ERROR + "|" + "Invalid messageType. Try Again");
+            }
+        }
+    }
+
+    public void handleLoginState() {
+
+    }
+
+    public void handleRegisterState() {
+
+    }
+
+    public void handleAdminState() {
+
+    }
+
+    public void handleDisplayMenuState() {
+
+    }
+
+    public void handleSingleGameState() {
+
+    }
+
+    public void handleMultiplayerGameState() {
+
+    }
+
+    public void handleGameConfigState() {
+
+    }
+
+
+    public void handleCreateTeamState() {
+
+    }
+
+    public void handleJoinTeamState() {
+
+    }
+
 }

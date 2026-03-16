@@ -1,5 +1,7 @@
 package org.game.common.protocol;
 
+import org.game.common.protocol.enums.MessageType;
+
 public class Message {
     String type;
     String[] parts;
@@ -28,4 +30,7 @@ public class Message {
         this.parts = parts;
     }
 
+    public MessageType getMessageType() {
+        return MessageType.valueOf(type.toUpperCase());
+    }
 }
