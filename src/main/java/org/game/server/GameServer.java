@@ -2,6 +2,9 @@ package org.game.server;
 
 import org.game.common.protocol.MessageParser;
 import org.game.common.protocol.enums.MessageType;
+import org.game.server.repositories.QuestionRepo;
+import org.game.server.repositories.TeamRepo;
+import org.game.server.repositories.UserRepo;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -24,12 +27,23 @@ public class GameServer {
 //            String users = socketClient.sendRequest(MessageParser.generate(MessageType.GET_USERS.name()));
 //            socketClient.close();
 
+            UserRepo userRepo = new UserRepo();
+            QuestionRepo questionRepo = new QuestionRepo();
+            TeamRepo teamRepo = new TeamRepo();
+
+
+
 
             ServerSocket serverSocket = new ServerSocket(port);
 
             while (true) {
                 Socket socket = serverSocket.accept(); // blocks until someone connects
-                ClientHandler clientHandler = new ClientHandler(socket);
+                ClientHandler clientHandler = new ClientHandler(
+                        socket,
+                        userRepo,
+                        questionRepo,
+                        teamRepo
+                );
                 clients.add(clientHandler);
                 Thread t = new Thread(clientHandler);
                 t.start();
