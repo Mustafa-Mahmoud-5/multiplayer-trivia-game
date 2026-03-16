@@ -10,7 +10,20 @@ public class ClientHandler implements Runnable {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
-    private User user;
+    private User user; // user attributed with current connection/thread
+
+    public User getUser() {
+        return user;
+    }
+
+    public void emitMsg(String message) {
+        out.println(message);
+    }
+
+    public String receiveMsg() throws IOException {
+        String msg = in.readLine();
+        return msg;
+    }
 
     public ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
@@ -23,32 +36,20 @@ public class ClientHandler implements Runnable {
             if (in != null) in.close();
             if (out != null) out.close();
             if (socket != null) socket.close();
-            System.out.println("Client handler closed.");
+            System.out.println("Socket closed.");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 
-    private void handleMessage(String msg) {
-        System.out.println("Handled msg " + msg);
-    }
 
     // TODO: Handle Game Control FLow
     @Override
     public void run() {
         try {
-            String msg;
-            while((msg = in.readLine()) != null) {
-                if(msg.trim().equals("-")) {
-                   out.println("Bye");
-                    break;
-                }
-
-                System.out.println("Received from client: " + msg);
-                handleMessage(msg);
-            }
-
+            ClientStateMachine clientStateMachine = new ClientStateMachine(this);
+            clientStateMachine.start();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
