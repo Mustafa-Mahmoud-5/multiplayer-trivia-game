@@ -1,5 +1,7 @@
 package org.game.server;
 
+import org.game.common.models.User;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -8,6 +10,7 @@ public class ClientHandler implements Runnable {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
+    private User user;
 
     public ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
@@ -31,13 +34,14 @@ public class ClientHandler implements Runnable {
         System.out.println("Handled msg " + msg);
     }
 
+    // TODO: Handle Game Control FLow
     @Override
     public void run() {
         try {
             String msg;
             while((msg = in.readLine()) != null) {
                 if(msg.trim().equals("-")) {
-                   System.out.println("Bye");
+                   out.println("Bye");
                     break;
                 }
 
@@ -49,6 +53,7 @@ public class ClientHandler implements Runnable {
             e.printStackTrace();
         } finally {
             // disconnect
+            System.out.println("Client Disconnected...");
             closeConnection();
         }
     }

@@ -1,5 +1,8 @@
 package org.game.server;
 
+import org.game.common.protocol.MessageParser;
+import org.game.common.protocol.enums.MessageType;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,6 +19,11 @@ public class GameServer {
 
 
             // TODO: connect with the lookup server and fetch users/questions data
+//            SocketClient socketClient = new SocketClient("localhost", 4444);
+//            String questions = socketClient.sendRequest(MessageParser.generate(MessageType.GET_QUESTIONS.name()));
+//            String users = socketClient.sendRequest(MessageParser.generate(MessageType.GET_USERS.name()));
+//            socketClient.close();
+
 
             ServerSocket serverSocket = new ServerSocket(port);
 
