@@ -22,7 +22,7 @@ public class GameServer {
             System.out.println("Server is starting...");
 
 
-            // TODO: connect with the lookup server and fetch users/questions data
+            // TODO: connect with the lookup server and fetch questions data
 //            SocketClient socketClient = new SocketClient("localhost", 4444);
 //            String questions = socketClient.sendRequest(MessageParser.generate(MessageType.GET_QUESTIONS.name()));
 //            String users = socketClient.sendRequest(MessageParser.generate(MessageType.GET_USERS.name()));
@@ -30,6 +30,7 @@ public class GameServer {
 
             UserRepo userRepo = new UserRepo();
             QuestionRepo questionRepo = new QuestionRepo();
+            questionRepo.load("");
             TeamRepo teamRepo = new TeamRepo();
 
 
