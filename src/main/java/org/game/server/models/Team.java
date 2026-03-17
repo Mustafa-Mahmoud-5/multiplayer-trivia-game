@@ -27,8 +27,9 @@ public class Team {
     }
 
     public boolean addMember(ClientHandler clientHandler) {
-        boolean isFound = members.stream().anyMatch(client -> client.getUser().getUsername().equals(clientHandler.getUser().getUsername()));
-        if(!isFound) {
+        boolean isFound = members.stream()
+                .anyMatch(client -> client.getUser().getUsername().equals(clientHandler.getUser().getUsername()));
+        if (!isFound) {
             members.add(clientHandler);
             return true;
         } else {

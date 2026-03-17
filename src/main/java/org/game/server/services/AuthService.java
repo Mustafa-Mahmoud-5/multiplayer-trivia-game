@@ -13,7 +13,7 @@ public class AuthService {
         this.userRepo = userRepo;
     }
 
-    public void login(String name, String pass) {
+    public User login(String name, String pass) {
         User user = userRepo.getByUserName(name);
         if(user== null) {
             throw new NotFoundException("User not found");
@@ -24,6 +24,11 @@ public class AuthService {
         }
 
         user.setLoggedIn(true);
+        return user;
+    }
+
+    public User getUser(String name) {
+        return userRepo.getByUserName(name);
     }
 
     public User register(String name, String pass) {

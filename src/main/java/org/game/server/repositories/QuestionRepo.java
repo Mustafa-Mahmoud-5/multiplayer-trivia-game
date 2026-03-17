@@ -2,9 +2,7 @@ package org.game.server.repositories;
 
 import org.game.common.models.Question;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class QuestionRepo {
@@ -16,6 +14,9 @@ public class QuestionRepo {
         this.generateSampleData();
     }
 
+    public List<Question> getAll() {
+        return questions;
+    }
 
     public List<Question> filterByCategory(String category) {
         return questions.stream().filter(q -> q.getCategory().equalsIgnoreCase(category)).collect(Collectors.toList());
@@ -25,6 +26,33 @@ public class QuestionRepo {
         return questions.stream().filter(q ->
                         q.getCategory().equalsIgnoreCase(category) && q.getDifficulty().equalsIgnoreCase(difficulty))
                 .collect(Collectors.toList());
+    }
+
+    public List<Question> filterByDifficulty(String difficulty) {
+        return questions.stream().filter(q -> q.getDifficulty().equalsIgnoreCase(difficulty)).collect(Collectors.toList());
+    }
+
+    public List<String> getCategories() {
+        return questions.stream().map(Question::getCategory).distinct()
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getDifficulties() {
+        return questions.stream().map(Question::getDifficulty).distinct()
+                .collect(Collectors.toList());
+    }
+
+    public List<Question> getRandomQuestions(String category, String difficulty, int count) {
+        List<Question> filtered = filterByCriteria(category, difficulty);
+        Collections.shuffle(filtered);
+        return filtered.stream().limit(count).collect(Collectors.toList());
+    }
+
+    // Get N random questions from any category/difficulty (Random Trivia)
+    public List<Question> getRandomMixed(int count) {
+        List<Question> all = new ArrayList<>(questions);
+        Collections.shuffle(all);
+        return all.stream().limit(count).collect(Collectors.toList());
     }
 
     private void generateSampleData() {
