@@ -93,17 +93,47 @@ public class ClientHandler implements Runnable {
             try {
                 String input = receiveMsg();
                 Message msg = MessageParser.parse(input);
+                if(msg.getParts().length < 3) {
+                    String res = MessageParser.generate(MessageType.ERROR.name(), "missing username or password");
+                    emitMsg(res);
+                    continue;
+                }
+
+                String name = msg.getParts()[1];
+                String pass = msg.getParts()[2];
                 MessageType messageType = msg.getMessageType();
 
                 switch (messageType) {
                     case REGISTER -> {
+                        User user = userRepo.getByUserName(name);
+                        if(user != null) {
+                            String res = MessageParser.generate(MessageType.ERROR.name(), "Username taken");
+                            emitMsg(res);
+                            continue;
+                        };
 
-
+                        User newUser = new User(name, pass, "user");
+                        newUser.setLoggedIn(true);
+                        userRepo.addUser(newUser);
                         return;
                     }
                     case LOGIN ->  {
+                        User user = userRepo.getByUserName(name);
+                        if(user== null) {
+                            String res = MessageParser.generate(MessageType.ERROR.name(), "User not found");
+                            emitMsg(res);
+                            continue;
+                        };
 
+                        if(!user.getPassword().equals(pass)) {
+                            String res = MessageParser.generate(MessageType.ERROR.name(), "User not found");
+                            emitMsg(res);
+                            continue;
+                        }
 
+                        user.setLoggedIn(true);
+                        String res = MessageParser.generate(MessageType.ERROR.name(), "User not found");
+                        emitMsg(res);
                         return;
                     }
 
@@ -112,7 +142,8 @@ public class ClientHandler implements Runnable {
                     }
                 }
             } catch (Exception e) {
-                emitMsg(MessageType.ERROR + "|" + "Invalid messageType. Try Again");
+                e.printStackTrace();
+                emitMsg(MessageType.ERROR + "|" + "catched Invalid messageType. Try Again");
             }
         }
     }
