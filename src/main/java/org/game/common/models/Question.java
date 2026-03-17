@@ -68,9 +68,8 @@ public class Question {
         this.correctAnswer = correctAnswer;
     }
 
-    public static class Team {
-        private String name;
-        ArrayList<User> players;
-        int score;
+    // takes String number as input. return bool
+    boolean isCorrect(String ansIdx) {
+        return ansIdx.equals(correctAnswer);
     }
 }
