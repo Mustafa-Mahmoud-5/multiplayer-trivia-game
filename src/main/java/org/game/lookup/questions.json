@@ -1,0 +1,122 @@
+[ 
+	{
+		"id": "1",
+		"text": "What planet is known as the Red Planet?",
+		"category": "SCIENCE",
+		"difficulty": "EASY",
+		"choices": ["Mars", "Venus", "Jupiter", "Mercury"],
+		"correctAnswer": "1"
+	},
+	{
+		"id": "2",
+		"text": "What is H2O commonly known as?",
+		"category": "SCIENCE",
+		"difficulty": "EASY",
+		"choices": ["Salt", "Water", "Hydrogen", "Oxygen"],
+		"correctAnswer": "2"
+	},
+	{
+		"id": "3",
+		"text": "Which gas do plants absorb from the atmosphere?",
+		"category": "SCIENCE",
+		"difficulty": "MEDIUM",
+		"choices": ["Nitrogen", "Carbon Dioxide", "Oxygen", "Helium"],
+		"correctAnswer": "2"
+	},
+	{
+		"id": "4",
+		"text": "What is the derivative of x^2?",
+		"category": "Math",
+		"difficulty": "MEDIUM",
+		"choices": ["x", "2x", "x^2", "2"],
+		"correctAnswer": "2"
+	},
+	{
+		"id": "5",
+		"text": "What is 9 x 7?",
+		"category": "Math",
+		"difficulty": "EASY",
+		"choices": ["56", "63", "72", "49"],
+		"correctAnswer": "2"
+	},
+	{
+		"id": "6",
+		"text": "What is the value of pi rounded to 2 decimal places?",
+		"category": "Math",
+		"difficulty": "EASY",
+		"choices": ["3.12", "3.14", "3.16", "3.18"],
+		"correctAnswer": "2"
+	},
+	{
+		"id": "7",
+		"text": "What is the capital of France?",
+		"category": "Geography",
+		"difficulty": "EASY",
+		"choices": ["Paris", "Rome", "Berlin", "Madrid"],
+		"correctAnswer": "1"
+	},
+	{
+		"id": "8",
+		"text": "Which continent is Egypt in?",
+		"category": "Geography",
+		"difficulty": "EASY",
+		"choices": ["Asia", "Europe", "Africa", "South America"],
+		"correctAnswer": "3"
+	},
+	{
+		"id": "9",
+		"text": "What is the longest river in the world?",
+		"category": "Geography",
+		"difficulty": "HARD",
+		"choices": ["Amazon", "Nile", "Yangtze", "Mississippi"],
+		"correctAnswer": "2"
+	},
+	{
+		"id": "10",
+		"text": "Who was the first President of the United States?",
+		"category": "HISTORY",
+		"difficulty": "EASY",
+		"choices": ["George Washington", "Abraham Lincoln", "John Adams", "Thomas Jefferson"],
+		"correctAnswer": "1"
+	},
+	{
+		"id": "11",
+		"text": "In which year did World War II end?",
+		"category": "HISTORY",
+		"difficulty": "MEDIUM",
+		"choices": ["1943", "1945", "1948", "1950"],
+		"correctAnswer": "2"
+	},
+	{
+		"id": "12",
+		"text": "Which empire built the Colosseum?",
+		"category": "HISTORY",
+		"difficulty": "HARD",
+		"choices": ["Greek Empire", "Roman Empire", "Ottoman Empire", "Persian Empire"],
+		"correctAnswer": "2"
+	},
+	{
+		"id": "13",
+		"text": "How many players are on a football (soccer) team on the field?",
+		"category": "SPORTS",
+		"difficulty": "EASY",
+		"choices": ["9", "10", "11", "12"],
+		"correctAnswer": "2"
+	},
+	{
+		"id": "14",
+		"text": "In tennis, what is the term for 0 points?",
+		"category": "SPORTS",
+		"difficulty": "MEDIUM",
+		"choices": ["Zero", "Nil", "Love", "Blank"],
+		"correctAnswer": "2"
+	},
+	{
+		"id": "15",
+		"text": "Which country won the FIFA World Cup in 2018?",
+		"category": "SPORTS",
+		"difficulty": "HARD",
+		"choices": ["Brazil", "Germany", "France", "Argentina"],
+		"correctAnswer": "2"
+	}
+]

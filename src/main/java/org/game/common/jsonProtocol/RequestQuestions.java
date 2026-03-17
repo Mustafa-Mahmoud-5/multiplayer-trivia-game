@@ -23,30 +23,63 @@ public class RequestQuestions {
     private QuestionDifficulty difficulty;
     private int count;
 
-    RequestQuestions(UUID ID, int numberOfQuestions){
+    public RequestQuestions() {
+    }
+
+    public RequestQuestions(UUID ID, int numberOfQuestions){
         requestId = ID;
         count = numberOfQuestions;
     }
 
-    RequestQuestions(UUID requestID, QuestionCategorty categorty, int numberOfQuestions){
+    public RequestQuestions(UUID requestID, QuestionCategorty categorty, int numberOfQuestions){
         requestId = requestID;
         this.category = categorty;
         count = numberOfQuestions;
     }
 
-    RequestQuestions(UUID requestID, QuestionDifficulty difficulty, int numberOfQuestions){
+    public RequestQuestions(UUID requestID, QuestionDifficulty difficulty, int numberOfQuestions){
         requestId = requestID;
         this.difficulty = difficulty;
         count = numberOfQuestions;
     }
 
-    RequestQuestions(UUID requestID, QuestionCategorty categorty, QuestionDifficulty difficulty, int numberOfQuestions){
+    public RequestQuestions(UUID requestID, QuestionCategorty categorty, QuestionDifficulty difficulty, int numberOfQuestions){
         requestId = requestID;
         this.category = categorty;
         this.difficulty = difficulty;
         count = numberOfQuestions;
+    }
+
+    public UUID getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(UUID requestId) {
+        this.requestId = requestId;
+    }
+
+    public QuestionCategorty getCategory() {
+        return category;
+    }
+
+    public void setCategory(QuestionCategorty category) {
+        this.category = category;
+    }
+
+    public QuestionDifficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(QuestionDifficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
 }
-
-// to use it from 
