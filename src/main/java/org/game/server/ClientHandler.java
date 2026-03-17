@@ -1,5 +1,7 @@
 package org.game.server;
 
+import org.game.common.errors.CustomException;
+import org.game.common.errors.InvalidArgumentException;
 import org.game.common.models.User;
 import org.game.common.protocol.Message;
 import org.game.common.protocol.MessageParser;
@@ -7,13 +9,14 @@ import org.game.common.protocol.enums.MessageType;
 import org.game.server.repositories.QuestionRepo;
 import org.game.server.repositories.TeamRepo;
 import org.game.server.repositories.UserRepo;
+import org.game.server.services.AuthService;
 
 import java.io.*;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable {
 
-    UserRepo userRepo;
+    AuthService authService;
     QuestionRepo questionRepo;
     TeamRepo teamRepo;
 
@@ -22,26 +25,45 @@ public class ClientHandler implements Runnable {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
-    private User user; // user attributed with current connection/thread
+    private User currentUser; // user attributed with current connection/thread
 
 
 
 
 
-    public ClientHandler(Socket socket, UserRepo userRepo, QuestionRepo questionRepo, TeamRepo teamRepo) throws IOException {
+    public ClientHandler(Socket socket, AuthService authService, QuestionRepo questionRepo, TeamRepo teamRepo) throws IOException {
         this.socket = socket;
         this.in  = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out  = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
 
-        this.userRepo = userRepo;
+        this.authService = authService;
+
+
         this.questionRepo = questionRepo;
         this.teamRepo = teamRepo;
 
     }
 
+    public void handleException(Exception e) {
+        e.printStackTrace();
+
+        String message;
+        int code;
+        if(e instanceof CustomException) {
+            message = ((CustomException) e).getMessage();
+            code = ((CustomException) e).getStatus();
+        } else {
+            code = 500;
+            message = "Something Went Wrong, Try Again!";
+        }
+
+        String res = MessageParser.generate(MessageType.ERROR.name(),(""+code), message);
+        emitMsg(res);
+
+    }
 
     public User getUser() {
-        return user;
+        return currentUser;
     }
 
     public void emitMsg(String message) {
@@ -94,9 +116,7 @@ public class ClientHandler implements Runnable {
                 String input = receiveMsg();
                 Message msg = MessageParser.parse(input);
                 if(msg.getParts().length < 3) {
-                    String res = MessageParser.generate(MessageType.ERROR.name(), "missing username or password");
-                    emitMsg(res);
-                    continue;
+                    throw new InvalidArgumentException("invalid message format. use command|name|password");
                 }
 
                 String name = msg.getParts()[1];
@@ -105,45 +125,20 @@ public class ClientHandler implements Runnable {
 
                 switch (messageType) {
                     case REGISTER -> {
-                        User user = userRepo.getByUserName(name);
-                        if(user != null) {
-                            String res = MessageParser.generate(MessageType.ERROR.name(), "Username taken");
-                            emitMsg(res);
-                            continue;
-                        };
-
-                        User newUser = new User(name, pass, "user");
-                        newUser.setLoggedIn(true);
-                        userRepo.addUser(newUser);
+                        User newUser = authService.register(name, pass);
+                        this.currentUser = newUser;
                         return;
                     }
                     case LOGIN ->  {
-                        User user = userRepo.getByUserName(name);
-                        if(user== null) {
-                            String res = MessageParser.generate(MessageType.ERROR.name(), "User not found");
-                            emitMsg(res);
-                            continue;
-                        };
-
-                        if(!user.getPassword().equals(pass)) {
-                            String res = MessageParser.generate(MessageType.ERROR.name(), "User not found");
-                            emitMsg(res);
-                            continue;
-                        }
-
-                        user.setLoggedIn(true);
-                        String res = MessageParser.generate(MessageType.ERROR.name(), "User not found");
-                        emitMsg(res);
+                        authService.login(name, pass);
                         return;
                     }
-
                     default -> {
-                        emitMsg(MessageType.ERROR + "|" + "Invalid messageType. Try Again");
+                        throw new InvalidArgumentException("Invalid messageType. Try Again");
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                emitMsg(MessageType.ERROR + "|" + "catched Invalid messageType. Try Again");
+                handleException(e);
             }
         }
     }

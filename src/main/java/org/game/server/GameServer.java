@@ -5,6 +5,7 @@ import org.game.common.protocol.enums.MessageType;
 import org.game.server.repositories.QuestionRepo;
 import org.game.server.repositories.TeamRepo;
 import org.game.server.repositories.UserRepo;
+import org.game.server.services.AuthService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -32,6 +33,9 @@ public class GameServer {
             TeamRepo teamRepo = new TeamRepo();
 
 
+            AuthService authService = new AuthService(userRepo);
+
+
 
 
             ServerSocket serverSocket = new ServerSocket(port);
@@ -40,7 +44,7 @@ public class GameServer {
                 Socket socket = serverSocket.accept(); // blocks until someone connects
                 ClientHandler clientHandler = new ClientHandler(
                         socket,
-                        userRepo,
+                        authService,
                         questionRepo,
                         teamRepo
                 );
