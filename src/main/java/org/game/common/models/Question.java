@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Question {
     private String id;
+    private String text;
     private String category;
     private String difficulty;
-    private String text;
     private List<String> choices;
     private String correctAnswer;
 
